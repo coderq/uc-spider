@@ -114,7 +114,10 @@ module.exports = function(task) {
         pages: [{
           pageNumber: 1,
           originalUrl: task.url,
-          content: U.filterContent(data.content)
+          content: U.filterContent(data.content, {
+            protocol: C.protocol,
+            domain: C.protocol + '//' + C.site
+          })
         }]
       };
 

@@ -114,24 +114,20 @@ function filterContent(content, opts) {
     $(xpath).remove();
   });
 
-  var fns = [
+  fns = [
     function($) {
       // 删除样式和宽高
       ['style', 'width', 'height', 'class'].forEach(function(attr) {
         $('*').removeAttr(attr);
       });
       // 图片处理
-      $('img').each(function() {
+      $('img, iframe').each(function() {
         var $this = $(this);
-        if ($this.attr('data-src') && !$this.attr('src')) {
-          $this.attr('src', $this.attr('data-src'));
-        }
-        if (!$this.attr('src')) return $this.remove();
-        if (!/^http/.test($this.attr('src')) && opts) {
-          $this.attr('src', fixImage($this.attr('src'), opts));
-        } else {
-          $this.remove();
-        }
+        var src = $this.attr('src') || $this.attr('data-src');
+
+        if (!src) $this.remove();
+
+        $this.attr('src', fixImage($this.attr('src'), opts));
       });
       // a标签处理
       $('a').each(function() {
@@ -254,11 +250,10 @@ Xpath.prototype = {
     return this.xpath;
   },
   out: function(data) {
-    return Object.keys(this.keys).reduce(function(ret, key) {
+    var out = Object.keys(this.keys).reduce(function(ret, key) {
       var args = this.keys[key].map(function(_key) {
         return data[_key.replace(/[\[\]]/g, '')];
       }).concat(cheerio);
-
       ret[key.replace(/[\[\]]/g, '')] = (this.fns[key] ? this.fns[key] : function() {
         var args = [].slice.call(arguments, 0, arguments.length - 1);
         if (Array.isArray(args[0])) {
@@ -270,6 +265,8 @@ Xpath.prototype = {
 
       return ret;
     }.bind(this), {});
+
+    return out;
   },
   ignore: function(allowFields) {
     return Object.keys(this.xpath).reduce(function(ret, key) {
