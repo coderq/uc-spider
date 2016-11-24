@@ -84,7 +84,9 @@ exports.timestamp = timestamp;
 function filterTitle(title) {
   if (!title) return '';
 
-  return title.trim();
+  return title.trim().replace(/&#x(\w+);/g, function($, $1) {
+    return String.fromCodePoint(parseInt($1, 16))
+  });
 }
 exports.filterTitle = filterTitle;
 
