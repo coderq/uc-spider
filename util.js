@@ -170,12 +170,14 @@ function fixImage(image, opts) {
 }
 exports.fixImage = fixImage;
 
-function getDomain(url) {
+function getDomain(url, isTop) {
   if (!url) return '';
 
-  return url.replace(/^http\:\/\/([^\/\?]+)/, function($, d) {
+  var domain = url.replace(/^https?\:\/\/([^\/\?]+).*$/, function($, d) {
     return d;
   });
+
+  return isTop ? domain.split('.').slice(-2).join('.') : domain;
 }
 exports.getDomain = getDomain;
 

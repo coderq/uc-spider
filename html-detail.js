@@ -9,13 +9,14 @@ var _ = require('underscore'),
   U = require('./util');
 
 module.exports = function(task) {
-  var grab, grabProxy, xpath, xdata,
+  var grab, grabProxy, xpath, xdata, articleFrom,
     allowEmpty = ['coverPic', 'relativeNews', 'keywords'];
 
   if (!(C = U.initConfig(C, 'detail', task.url))) {
     return task.done(Error('Not match rule.'));
   }
 
+  articleFrom = U.getDomain(task.url, true);
   xpath = new U.Xpath();
   xdata = xpath.init(C);
 
@@ -93,7 +94,8 @@ module.exports = function(task) {
         originalUrl: task.url,
         title: U.filterTitle(data.title || flowerData.title),
         summary: U.filterSummary(data.summary || flowerData.summary),
-        articleFrom: U.getDomain(this.bu.domain),
+        articleFrom: articleFrom,
+        domain: U.getDomain(this.bu.domain, true),
         belongSite: U.getDomain(this.bu.domain),
         belongSeed: this.bu.domain,
         language: C.language,
@@ -104,8 +106,12 @@ module.exports = function(task) {
         categoryFirst: flowerData.categoryFirst,
         keywords: U.filterKeywords(data.keywords || flowerData.keywords),
         contentProvider: {
-          name: U.getDomain(this.bu.domain)
+          cp_key: C.getCPKey ? C.getCPKey(task.url) : articleFrom,
+          isCooperation: false,
+          name: '',
+          logo: ''
         },
+        cluster: flowerData.cluster,
         coverPic: U.fixImage(data.coverPic || flowerData.coverPic, {
           domain: this.bu.domain,
           protocol: C.protocol

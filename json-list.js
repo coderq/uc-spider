@@ -37,6 +37,7 @@ module.exports = function(task) {
     .get(task.url)
     .then(grabProxy.checkJson)
     .data(function(data) {
+      var clusterData = grabProxy.parseJson(task.data);
       C.itemMap(data).forEach(function(item) {
         var url = item.url || item;
         var flowerData = item.flowerData || {};
@@ -47,7 +48,8 @@ module.exports = function(task) {
         this.bu.flower.push({
           url: url,
           data: _.extend(flowerData, {
-            categoryFirst: info.categoryFirst
+            categoryFirst: info.categoryFirst,
+            cluster: clusterData.cluster || task.url
           })
         });
 
