@@ -47,7 +47,7 @@ function timestamp(r_time, diff) {
     // 适配以下规则：
     // '12.11.2016 - 19:04'
     // '12/11/2016 19:04'
-  } else if ((matches = r_time.trim().match(new RegExp('^(\\d{1,2})\\s*[\\.\\/]\\s*(\\d{1,2})\\s*[\\.\\/]\\s*(\\d{4})(\\s*\\-?\\s*(\\d{1,2})\\s*\\:\\s*(\\d{1,2}))?$', 'i')))) {
+  } else if ((matches = r_time.trim().match(new RegExp('^(\\d{1,2})\\s*[\\.\\/]\\s*(\\d{1,2})\\s*[\\.\\/]\\s*(\\d{4,4})([\\s\\-\\|]+(\\d{1,2})[\\s\\:]+(\\d{1,2}))?$', 'i')))) {
     time = (function($, date, month, year, $1, hour, minute) {
       return new Date([
         year,
