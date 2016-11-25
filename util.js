@@ -35,7 +35,7 @@ function timestamp(r_time, diff) {
     // '1 ноября 2016  13:15'
     // '27 октября 2016'
     // '2 июня, 16:46'
-  } else if ((matches = r_time.trim().match(new RegExp('^(\\d{1,2})\\s+(' + monthes.join('|') + ')\\s*(\\d{4,4})?[\\,\\-\\s*]+((\\d{1,2})\\s*\\:\\s*(\\d{1,2}))?$', 'i')))) {
+  } else if ((matches = r_time.trim().match(new RegExp('^(\\d{1,2})\\s+(' + monthes.join('|') + ')\\s*(\\d{4,4})?[\\,\\.\\-\\s*]+((\\d{1,2})\\s*\\:\\s*(\\d{1,2}))?\.?$', 'i')))) {
     time = (function($, date, month, year, $1, hour, minute) {
       var now = new Date();
       month = monthes.indexOf(month.toLowerCase()) + 1;
@@ -165,7 +165,9 @@ exports.filterSummary = filterSummary;
 function filterKeywords(keywords) {
   if (!keywords) return '';
 
-  return keywords.trim();
+  return keywords.trim().replace(/&#x(\w+);/g, function($, $1) {
+    return String.fromCodePoint(parseInt($1, 16))
+  });
 }
 exports.filterKeywords = filterKeywords;
 
