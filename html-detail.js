@@ -107,7 +107,7 @@ module.exports = function(task) {
         categoryFirst: flowerData.categoryFirst,
         keywords: U.filterKeywords(data.keywords || flowerData.keywords),
         contentProvider: {
-          cp_key: C.getCPKey ? C.getCPKey(task.url) : articleFrom,
+          cpKey: C.getCPKey ? C.getCPKey(task.url) : articleFrom,
           isCooperation: false,
           name: '',
           logo: ''
