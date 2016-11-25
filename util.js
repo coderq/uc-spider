@@ -4,11 +4,19 @@ var cheerio = require('cheerio');
 function timestamp(r_time, diff) {
   var monthes = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
   var matches, time;
+
   if (_.isNumber(r_time)) {
     return r_time;
-    // 适配以下规则：
-    // '22:15  31 октября 2016'
-  } else if ((matches = r_time.trim().match(new RegExp('^((\\d{1,2})\\s*\\:\\s*(\\d{1,2})\\s+)?(\\d{1,2})\\s+(' + monthes.join('|') + ')\\s+(\\d{4,4})$', 'i')))) {
+  }
+
+  // 部分时间含有未转译的代码
+  r_time = r_time.replace(/&#x(\w+);/g, function($, $1) {
+    return String.fromCodePoint(parseInt($1, 16))
+  });
+
+  // 适配以下规则：
+  // '22:15  31 октября 2016'
+  if ((matches = r_time.trim().match(new RegExp('^((\\d{1,2})\\s*\\:\\s*(\\d{1,2})\\s+)?(\\d{1,2})\\s+(' + monthes.join('|') + ')\\s+(\\d{4,4})$', 'i')))) {
     time = (function($, $1, hour, minute, date, month, year) {
       return new Date([
         year,

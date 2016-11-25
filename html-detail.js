@@ -16,7 +16,8 @@ module.exports = function(task) {
     return task.done(Error('Not match rule.'));
   }
 
-  articleFrom = U.getDomain(task.url, true);
+  // 如果是聚合网站，会有originalUrl属性，则取其值
+  articleFrom = U.getDomain(task.originalUrl || task.url, true);
   xpath = new U.Xpath();
   xdata = xpath.init(C);
 

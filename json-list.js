@@ -49,7 +49,8 @@ module.exports = function(task) {
           url: url,
           data: _.extend(flowerData, {
             categoryFirst: info.categoryFirst,
-            cluster: clusterData.cluster || task.url
+            cluster: clusterData.cluster || task.url,
+            originalUrl: item.originalUrl
           })
         });
 
