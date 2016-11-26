@@ -39,19 +39,22 @@ module.exports = function(task) {
     .then(grabProxy.checkData)
     .data(function(data) {
       var clusterData = grabProxy.parseJson(task.data);
+      var cluster = clusterData.cluster || task.url;
       xpath.out(data)['items']
         .forEach(function(item) {
           var url = item.url || item;
           var flowerData = item.flowerData || {};
           var info;
           url = url.match(/^http/) ? url : this.bu.domain + url;
-          info = U.getCategoryList(url, C.categoryListRule);
+          info = U.getCategoryList(url, C.categoryListRule, {
+            cluster: cluster
+          });
 
           this.bu.flower.push({
             url: url,
             data: _.extend(flowerData, {
               categoryFirst: info.categoryFirst,
-              cluster: clusterData.cluster || task.url
+              cluster: cluster
             })
           });
 
