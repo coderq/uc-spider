@@ -16,7 +16,7 @@ function timestamp(r_time, diff) {
 
   // 适配以下规则：
   // '22:15  31 октября 2016'
-  if ((matches = r_time.trim().match(new RegExp('^((\\d{1,2})\\s*\\:\\s*(\\d{1,2})\\s+)?(\\d{1,2})\\s+(' + monthes.join('|') + ')\\s+(\\d{4,4})$', 'i')))) {
+  if ((matches = r_time.trim().match(new RegExp('^((\\d{1,2})\\s*\\:\\s*(\\d{1,2})[\\,\\.\\|\\s]+)?(\\d{1,2})\\s+(' + monthes.join('|') + ')\\s+(\\d{4,4})$', 'i')))) {
     time = (function($, $1, hour, minute, date, month, year) {
       return new Date([
         year,
@@ -267,10 +267,11 @@ Xpath.prototype = {
     return this.xpath;
   },
   out: function(data) {
-    var out = Object.keys(this.keys).reduce(function(ret, key) {
+    return Object.keys(this.keys).reduce(function(ret, key) {
       var args = this.keys[key].map(function(_key) {
         return data[_key.replace(/[\[\]]/g, '')];
       }).concat(cheerio);
+
       ret[key.replace(/[\[\]]/g, '')] = (this.fns[key] ? this.fns[key] : function() {
         var args = [].slice.call(arguments, 0, arguments.length - 1);
         if (Array.isArray(args[0])) {
@@ -280,10 +281,14 @@ Xpath.prototype = {
         }
       }).apply(null, args);
 
+      if (ret.items) {
+        ret.items = ret.items.filter(function(url, i, ary) {
+          return ary.indexOf(url) === i;
+        });
+      }
+
       return ret;
     }.bind(this), {});
-
-    return out;
   },
   ignore: function(allowFields) {
     return Object.keys(this.xpath).reduce(function(ret, key) {

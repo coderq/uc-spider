@@ -36,7 +36,7 @@ module.exports = function(task) {
     .error(grabProxy.error)
     .get(task.url)
     .set(xpath.init(C))
-    .then(grabProxy.checkData)
+    // .then(grabProxy.checkData)
     .data(function(data) {
       var clusterData = grabProxy.parseJson(task.data);
       var cluster = clusterData.cluster || task.url;
@@ -46,7 +46,7 @@ module.exports = function(task) {
           var flowerData = item.flowerData || {};
           var info;
           url = url.match(/^http/) ? url : this.bu.domain + url;
-          info = U.getCategoryList(url, C.categoryListRule, {
+          info = U.getCategoryList(task.url, C.categoryListRule, {
             cluster: cluster
           });
 
