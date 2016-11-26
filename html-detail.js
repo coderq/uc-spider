@@ -104,7 +104,7 @@ module.exports = function(task) {
         sourcePublishTime: U.timestamp(data.publishTime || flowerData.publishTime, C.timeDiff),
         sourcePublishLabel: data.publishTime,
         totalPage: 1,
-        categoryFirst: flowerData.categoryFirst,
+        categoryFirst: info.categoryFirst || flowerData.categoryFirst,
         keywords: U.filterKeywords(data.keywords || flowerData.keywords),
         contentProvider: {
           cpKey: C.getCPKey ? C.getCPKey(task.url) : articleFrom,
