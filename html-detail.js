@@ -46,7 +46,7 @@ module.exports = function(task) {
     .set(xdata)
     .then(grabProxy.checkData)
     .data(function(data) {
-      var flower, extend, relatedNews, flowerData;
+      var flower, extend, relatedNews, flowerData, info;
 
       data = xpath.out(data);
       flower = [];
@@ -57,8 +57,6 @@ module.exports = function(task) {
       // 如果该新闻已经是关联新闻则不爬取
       if (!flowerData.isRelated && data.relativeNews && data.relativeNews.length) {
         data.relativeNews.forEach(function(url) {
-          var info;
-
           url = url.match(/^http/) ? url : this.bu.domain + url;
           info = U.getCategoryList(url, flowerData.cluster, C.categoryListRule);
 
