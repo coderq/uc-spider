@@ -60,7 +60,7 @@ module.exports = function(task) {
           var info;
 
           url = url.match(/^http/) ? url : this.bu.domain + url;
-          info = U.getCategoryList(url, C.categoryListRule);
+          info = U.getCategoryList(url, flowerData.cluster, C.categoryListRule);
 
           relatedNews.push({
             xtype: 'relatedNews',

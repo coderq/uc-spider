@@ -193,20 +193,20 @@ function getDomain(url, isTop) {
 }
 exports.getDomain = getDomain;
 
-function getCategoryFirst(url, filter) {
+function getCategoryFirst(url, cluster, filter) {
   if (filter && toString.call(filter) === '[object Object]') {
     var info = _.pairs(filter);
     var item = info.filter(function(item) {
-      return item[1].test(url);
+      return item[1].test(url) || item[1].test(cluster);
     }).shift();
     return item && item[0];
   } else if (filter && toString.call(filter) === '[object Function]') {
-    return filter(url);
+    return filter(url, cluster);
   }
 }
 
-function getCategoryList(url, rule, opts) {
-  var categoryFirst = getCategoryFirst(url, rule && rule.categoryFilter);
+function getCategoryList(url, cluster, rule, opts) {
+  var categoryFirst = getCategoryFirst(url, cluster, rule && rule.categoryFilter);
   return {
     categoryFirst: categoryFirst || rule.others,
     list: categoryFirst ?

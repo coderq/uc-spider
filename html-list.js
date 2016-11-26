@@ -46,7 +46,7 @@ module.exports = function(task) {
           var flowerData = item.flowerData || {};
           var info;
           url = url.match(/^http/) ? url : this.bu.domain + url;
-          info = U.getCategoryList(task.url, C.categoryListRule, {
+          info = U.getCategoryList(url, task.url, C.categoryListRule, {
             cluster: cluster
           });
 
