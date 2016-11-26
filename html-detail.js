@@ -46,19 +46,22 @@ module.exports = function(task) {
     .set(xdata)
     .then(grabProxy.checkData)
     .data(function(data) {
-      var flower, extend, relatedNews, flowerData, info;
+      var flower, extend, relatedNews, flowerData, taskUrlInfo;
 
       data = xpath.out(data);
       flower = [];
       extend = [];
       relatedNews = [];
       flowerData = grabProxy.parseJson(task.data);
+      taskUrlInfo = U.getCategoryList(task.url, flowerData.cluster, C.categoryListRule);
 
       // 如果该新闻已经是关联新闻则不爬取
       if (!flowerData.isRelated && data.relativeNews && data.relativeNews.length) {
         data.relativeNews.forEach(function(url) {
+          var relativeNewsInfo;
+
           url = url.match(/^http/) ? url : this.bu.domain + url;
-          info = U.getCategoryList(url, flowerData.cluster, C.categoryListRule);
+          relativeNewsInfo = U.getCategoryList(url, flowerData.cluster, C.categoryListRule);
 
           relatedNews.push({
             xtype: 'relatedNews',
@@ -69,7 +72,7 @@ module.exports = function(task) {
             url: url,
             data: {
               isRelated: true,
-              categoryFirst: info.categoryFirst
+              categoryFirst: relativeNewsInfo.categoryFirst
             }
           });
 
@@ -77,10 +80,10 @@ module.exports = function(task) {
             url: url,
             data: [{
               xtype: 'pushRules',
-              list: info.list
+              list: relativeNewsInfo.list
             }, {
               xtype: "category",
-              categoryFirst: info.categoryFirst
+              categoryFirst: relativeNewsInfo.categoryFirst
             }, {
               xtype: 'isRelated',
               related: true
@@ -102,7 +105,7 @@ module.exports = function(task) {
         sourcePublishTime: U.timestamp(data.publishTime || flowerData.publishTime, C.timeDiff),
         sourcePublishLabel: data.publishTime,
         totalPage: 1,
-        categoryFirst: info.categoryFirst || flowerData.categoryFirst,
+        categoryFirst: taskUrlInfo.categoryFirst || flowerData.categoryFirst,
         keywords: U.filterKeywords(data.keywords || flowerData.keywords),
         contentProvider: {
           cpKey: C.getCPKey ? C.getCPKey(task.url) : articleFrom,
