@@ -43,12 +43,12 @@ module.exports = function(task) {
     })
     .error(grabProxy.error)
     .get(task.url)
-    .set(xdata)
-    .then(grabProxy.checkData)
+    .then(grabProxy.checkJson)
     .data(function(data) {
       var flower, extend, relatedNews, flowerData, taskUrlInfo;
 
-      data = xpath.out(data);
+      data = C.itemFilter(data);
+
       flower = [];
       extend = [];
       relatedNews = [];
