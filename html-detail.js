@@ -17,7 +17,7 @@ module.exports = function(task) {
   }
 
   // 如果是聚合网站，会有originalUrl属性，则取其值
-  articleFrom = U.getDomain(task.originalUrl || task.url, true);
+  articleFrom = C.articleFrom || U.getDomain(task.originalUrl || task.url, true);
   xpath = new U.Xpath();
   xdata = xpath.init(C);
 
@@ -97,8 +97,8 @@ module.exports = function(task) {
         title: U.filterTitle(data.title || flowerData.title),
         summary: U.filterSummary(data.summary || flowerData.summary),
         articleFrom: articleFrom,
-        domain: U.getDomain(this.bu.domain, true),
-        belongSite: U.getDomain(this.bu.domain),
+        domain: C.site,
+        belongSite: C.site,
         belongSeed: this.bu.domain,
         language: C.language,
         country: C.country,
