@@ -1,0 +1,8 @@
+[
+  "./_.js",
+  "./html-detail.js",
+  "./html-list.js",
+  "./json-detail.js",
+  "./json-list.js",
+  "./util.js"
+]
